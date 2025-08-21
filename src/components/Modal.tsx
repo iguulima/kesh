@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { View, Text, Modal, StyleSheet, Pressable } from 'react-native';
 import {Divida} from '~/services/storage';
 import { Ionicons } from '@expo/vector-icons';
+import { deleteDivida, getDividas } from '~/services/storage';
 
 type Props = {
     visible: boolean;
     onClose: () => void;
     divida: Divida | null;
+    onDelete: (id: string) => void;
 }
-export default function ModalContent({ visible, onClose, divida }: Props) {
+export default function ModalContent({ visible, onClose, divida, onDelete }: Props) {
     if (!divida) return null;
-    
+
     return(
         <Modal
             animationType="fade"
@@ -18,10 +20,7 @@ export default function ModalContent({ visible, onClose, divida }: Props) {
             visible={visible}
             onRequestClose={onClose}
         >
-            <Pressable 
-            style={styles.overlay}
-            onPress={onClose}
-            >
+            <View style={styles.overlay}>
                 <View style={[styles.modalContainer, { padding: 28 }]}>
                     <View style={{justifyContent: 'space-between', flexDirection: 'row',alignItems:'center'}}>
                         <Text style={styles.contentTitle}>Detalhes da Divida</Text>
@@ -53,9 +52,11 @@ export default function ModalContent({ visible, onClose, divida }: Props) {
                         </View>
                         <Text style={styles.contentCardText}>{divida.descricao}</Text>
                     </View>
-                    
+                    <Pressable onPress={() => { divida && onDelete(divida.id); onClose(); }} style={styles.deleteBtn}>
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Excluir Dívida</Text>
+                    </Pressable>
                 </View>
-            </Pressable>
+            </View>
         </Modal>
     )
 };
@@ -99,4 +100,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: '500',
     },
+    deleteBtn: {
+        backgroundColor: '#FF6467',
+        borderRadius: 8,
+        padding: 12,
+        alignItems: 'center',
+        marginTop: 16,
+    }
 });

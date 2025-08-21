@@ -1,7 +1,7 @@
 import { FlatList, Text, StyleSheet, Pressable, View, Modal } from 'react-native';
-import { getDividas, Divida } from '~/services/storage';
-import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { getDividas, Divida, deleteDivida } from '~/services/storage';
+import { useState, useCallback } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Layout from '~/components/Layout';
 import ModalContent from '~/components/Modal'
@@ -16,14 +16,21 @@ export default function Home() {
     const [dividaSelecionada, setDividaSelecionada] = useState<Divida | null>(null);
 
     
-    useEffect(() => {
+    useFocusEffect(
+      useCallback(() => {
         async function loadDividas() {
-            const data = await getDividas();
-            setDividas(data);
+          const data = await getDividas();
+          setDividas(data);
         }
-        
         loadDividas();
-    }, []);
+      }, [])
+    );
+
+    const handleDelete = async (id: string) => {
+    await deleteDivida(id);
+    const data = await getDividas();
+    setDividas(data);
+  };
 
     const [modalVisivel, setModalVisivel] = useState(true);
 
@@ -66,6 +73,7 @@ return (
       visible={modalVisivel}
       onClose={() => setModalVisivel (false)}
       divida={dividaSelecionada}
+      onDelete={handleDelete}
     />
   </Layout>
 );
