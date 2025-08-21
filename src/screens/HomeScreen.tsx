@@ -5,6 +5,9 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Layout from '~/components/Layout';
 import ModalContent from '~/components/Modal'
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function Home() {
     type RootStackParamList = {
@@ -34,9 +37,21 @@ export default function Home() {
 
     const [modalVisivel, setModalVisivel] = useState(true);
 
+    const totalDividas = dividas.reduce((acc, item) => acc + Number(item.valor), 0);
     
 return (
   <Layout>
+    <LinearGradient 
+      colors={['#fd1d1d', '#fe3e3e', '#ff6161']}
+      start={{ x: 0, y: 0.5 }}
+      end={{ x: 1, y: 0.5 }}
+      style={styles.totalContainer}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Ionicons name="card-outline" size={24} color="#fff" />
+          <Text style={styles.totalTitle}>Dividas à pagar</Text>
+        </View>
+      <Text style={styles.totalValor}>R$ {totalDividas.toFixed(2)}</Text>
+    </LinearGradient>
     <FlatList
     style={styles.listContainer}
       data={dividas}
@@ -80,6 +95,22 @@ return (
 }
 
 const styles = StyleSheet.create({
+  totalContainer:{
+    height: 200,
+    borderRadius: 20,
+    padding: 20,
+  },
+  totalTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  totalValor: {
+  color: '#fff',
+  fontSize: 48,
+  fontWeight: 'bold',
+  marginTop: 32,
+},
   btn: {
     backgroundColor: '#1C2735',
     borderRadius: 8,
