@@ -1,9 +1,10 @@
-import { FlatList, Text, StyleSheet, Pressable, View } from 'react-native';
+import { FlatList, Text, StyleSheet, Pressable, View, Modal } from 'react-native';
 import { getDividas, Divida } from '~/services/storage';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Layout from '~/components/Layout';
+import ModalContent from '~/components/Modal'
 
 export default function Home() {
     type RootStackParamList = {
@@ -12,6 +13,8 @@ export default function Home() {
     };
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const [dividas, setDividas] = useState<Divida[]>([]);
+    const [dividaSelecionada, setDividaSelecionada] = useState<Divida | null>(null);
+
     
     useEffect(() => {
         async function loadDividas() {
@@ -21,6 +24,9 @@ export default function Home() {
         
         loadDividas();
     }, []);
+
+    const [modalVisivel, setModalVisivel] = useState(true);
+
     
 return (
   <Layout>
@@ -29,7 +35,12 @@ return (
       data={dividas}
       keyExtractor={(item: Divida) => item.id?.toString() ?? Math.random().toString()}
       renderItem={({ item }: { item: Divida }) => (
-        <View style={styles.itemContainer}>
+      <Pressable 
+      onPress={() => {
+          setModalVisivel(true);
+          setDividaSelecionada(item);
+      }}>
+        <View style={[styles.itemContainer, {marginBottom: 12}]}>
             <View style={{display: 'flex', alignItems: 'center' }}>
                 <Text style={styles.itemPessoa}>{item.pessoa}</Text>
                 <Text style={styles.itemDescricao}>{item.descricao}</Text>
@@ -40,6 +51,7 @@ return (
                 </Text>
             </View>
         </View>
+      </Pressable>
       )}
       ListEmptyComponent={
         <Text style={{ color: '#fff', textAlign: 'center', marginTop: 32 }}>
@@ -50,6 +62,11 @@ return (
     <Pressable style={styles.btn} onPress={() => navigation.navigate('AddDivida')}>
       <Text style={styles.btnText}>Adicionar Dívida</Text>
     </Pressable>
+    <ModalContent 
+      visible={modalVisivel}
+      onClose={() => setModalVisivel (false)}
+      divida={dividaSelecionada}
+    />
   </Layout>
 );
 }
@@ -76,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E2939',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#263141',
+    borderColor: '#273344',
 
     display: 'flex',
     flexDirection: 'row',
