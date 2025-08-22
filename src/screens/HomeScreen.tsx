@@ -37,8 +37,9 @@ export default function Home() {
 
     const [modalVisivel, setModalVisivel] = useState(true);
 
-    const totalDividas = dividas.reduce((acc, item) => acc + Number(item.valor), 0);
-    
+    const totalDividasValor = dividas.reduce((acc, item) => acc + Number(item.valor), 0);
+    const totalDividas = dividas.reduce((acc) => acc + 1, 0);
+
 return (
   <Layout>
     <LinearGradient 
@@ -47,10 +48,15 @@ return (
       end={{ x: 1, y: 0.5 }}
       style={styles.totalContainer}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <View style={{padding: 8, borderRadius: 8, backgroundColor: '#f76a71'}}>
           <Ionicons name="card-outline" size={24} color="#fff" />
+        </View>
           <Text style={styles.totalTitle}>Dividas à pagar</Text>
         </View>
-      <Text style={styles.totalValor}>R$ {totalDividas.toFixed(2)}</Text>
+      <Text style={styles.totalValor}>R$ {totalDividasValor.toFixed(2)}</Text>
+      <Text style={{ color: '#ffd6d8', fontSize: 16, marginTop: 12, alignSelf: 'flex-end', fontWeight: '600' }}>
+        {totalDividas} {totalDividas === 1 ? 'Dívida' : 'Dívidas'}
+      </Text>
     </LinearGradient>
     <FlatList
     style={styles.listContainer}
@@ -76,9 +82,17 @@ return (
       </Pressable>
       )}
       ListEmptyComponent={
-        <Text style={{ color: '#fff', textAlign: 'center', marginTop: 32 }}>
-          Nenhuma dívida cadastrada.
-        </Text>
+        <View style={{marginTop: 16}}>
+          <View style={{backgroundColor: '#182438',borderWidth: 1, borderColor: '#29384f', borderRadius: 128, alignSelf: 'center', justifyContent: 'center', padding:40}}>
+            <Ionicons name="alert-circle-outline" size={80} color="#67788c" style={{ textAlign: 'center'}} />
+          </View>
+          <Text style={{ color: '#c0cfe0', textAlign: 'center', marginTop: 32, fontWeight: 'bold' , fontSize: 20 }}>
+            Nenhuma dívida cadastrada.
+          </Text>
+          <Text style={{ color: '#67788c', textAlign: 'center', marginTop: 16, fontWeight: 'semibold', width: '85%', alignSelf: 'center' }}>
+            Você está com as finanças em dia! Comece a registrar suas dívidas para manter o controle total.
+          </Text>
+        </View>
       }
     />
     <Pressable style={styles.btn} onPress={() => navigation.navigate('AddDivida')}>
@@ -97,8 +111,9 @@ return (
 const styles = StyleSheet.create({
   totalContainer:{
     height: 200,
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 20,
+    marginBottom: 16,
   },
   totalTitle: {
     color: '#fff',
@@ -126,7 +141,7 @@ const styles = StyleSheet.create({
   listContainer: {
     backgroundColor:'#101828',
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 16,
   },
   itemContainer: {
     backgroundColor: '#1E2939',

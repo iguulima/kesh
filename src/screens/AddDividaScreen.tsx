@@ -3,8 +3,8 @@ import { Text, TextInput, View, Alert, StyleSheet, Pressable } from 'react-nativ
 import { saveDivida } from '~/services/storage';
 import BackBtn from '~/components/BackBtn';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Layout from '~/components/Layout';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function AddDivida() {
     const navigation = useNavigation();
@@ -43,19 +43,27 @@ export default function AddDivida() {
         <BackBtn />
         
         <View style={styles.container}>
-            <Text style={styles.label}>Detalhes</Text>
+            <Text style={styles.label}>DETALHES</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                <Ionicons name="person-outline" size={24} color="#C5D0DE" />
+                <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>Pessoa</Text>
+            </View>
             <TextInput
                 value={pessoa}
                 onChangeText={setPessoa}
                 placeholder="Pessoa"
-                placeholderTextColor="gray"
+                placeholderTextColor="#67788c"
                 style={styles.input}
             />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                <Ionicons name="document-text-outline" size={24} color="#C5D0DE" />
+                <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>Descrição</Text>
+            </View>
             <TextInput
                 value={descricao}
                 onChangeText={setDescricao}
                 placeholder="Descrição"
-                placeholderTextColor="gray"
+                placeholderTextColor="#67788c"
                 style={[styles.input, { height: 100 }]}
                 multiline
                 numberOfLines={4}
@@ -64,18 +72,22 @@ export default function AddDivida() {
         
         <View style={styles.container}>
             <Text style={styles.label}>Qual o valor da sua dívida?</Text>
-            <TextInput
+            <View>
+                <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>$ Valor</Text>
+                <TextInput
                 value={valor}
                 onChangeText={setValor}
                 keyboardType="numeric"
                 placeholder="R$ 0,00"
-                placeholderTextColor="gray"
+                placeholderTextColor="#67788c"
                 style={styles.input}
             />
+            </View>
         </View>
         
         <Pressable style={styles.btn} onPress={handleAddDivida}>
-            <Text style={styles.btnText} >Adicionar</Text>
+            <Ionicons name="add-outline" size={24} color="#fff" />
+            <Text style={styles.btnText}>Adicionar Dívida</Text>
         </Pressable>
         </Layout>
     );
@@ -89,10 +101,10 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     label: {
-        color: '#FFFFFF',
+        color: '#C5D0DE',
         fontSize: 18,
         fontWeight: '600',
-        marginVertical: 12,
+        marginBottom: 32,
     },
     input: {
         color: '#FFFFFF',
@@ -101,14 +113,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         padding: 12,
-        marginVertical: 8,
+        marginTop: 12,
+        marginBottom: 32,
         fontSize: 16,
     },
     btn:{
-        backgroundColor: '#1C2735',
+        backgroundColor: '#d6171d',
         borderRadius: 8,
         padding: 12,
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     btnText:{
         color: '#FFFFFF',
