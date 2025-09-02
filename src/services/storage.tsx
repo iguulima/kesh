@@ -7,6 +7,7 @@ export type Divida = {
     pessoa: string;
     descricao: string;
     valor: number;
+    data: string | null;
 }
 
 export async function saveDivida(divida: Divida) {

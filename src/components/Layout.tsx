@@ -1,10 +1,10 @@
-import { SafeAreaView, StyleSheet, StatusBar, Platform, View } from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar, Platform, View, KeyboardAvoidingView } from 'react-native';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#18181b" />
-      <View style={styles.container}>{children}</View>
+        <StatusBar barStyle="light-content" backgroundColor="#18181b" />
+        <View style={styles.container}>{children}</View>
     </SafeAreaView>
   );
 }

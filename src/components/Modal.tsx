@@ -21,8 +21,8 @@ export default function ModalContent({ visible, onClose, divida, onDelete }: Pro
             onRequestClose={onClose}
         >
             <View style={styles.overlay}>
-                <View style={[styles.modalContainer, { padding: 28 }]}>
-                    <View style={{justifyContent: 'space-between', flexDirection: 'row',alignItems:'center'}}>
+                <View style={styles.modalContainer}>
+                    <View style={{justifyContent: 'space-between', flexDirection: 'row',alignItems:'center', marginHorizontal:12}}>
                         <Text style={styles.contentTitle}>Detalhes da Divida</Text>
                         <Pressable onPress={onClose}> 
                             <Ionicons name="close-outline" size={28} color="#8097bf" />
@@ -52,6 +52,17 @@ export default function ModalContent({ visible, onClose, divida, onDelete }: Pro
                         </View>
                         <Text style={styles.contentCardText}>{divida.descricao}</Text>
                     </View>
+                    <View style={styles.contentCard}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
+                            <Ionicons name="calendar-outline" size={16} color="#8097bf" />
+                            <Text style={[styles.contentSubtitle, {marginLeft: 4}]}>
+                                DATA:
+                            </Text>
+                        </View>
+                        <Text style={styles.contentCardText}>
+                            {divida.data ? new Date(divida.data).toLocaleDateString() : 'Sem data'}
+                        </Text>
+                    </View>
                     <Pressable onPress={() => { divida && onDelete(divida.id); onClose(); }} style={styles.deleteBtn}>
                         <Text style={{ color: '#fff', fontWeight: 'bold' }}>Excluir Dívida</Text>
                     </Pressable>
@@ -70,11 +81,13 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         backgroundColor: '#131a28',
-        width: '85%',
+        width: '90%',
         height: '70%',
         borderRadius: 16,
         borderWidth: 1,
         borderColor: '#273344',
+        paddingVertical: 24,
+        paddingHorizontal: 16,
     },
     contentTitle:{
         color: '#fff',
@@ -90,6 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1E2939',
         borderRadius: 12,
         padding: 16,
+        paddingHorizontal: 12,
         marginVertical: 8,
         width: '100%',
         borderWidth: 1,

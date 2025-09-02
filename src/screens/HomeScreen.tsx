@@ -69,7 +69,8 @@ return (
           setDividaSelecionada(item);
       }}>
         <View style={[styles.itemContainer, {marginBottom: 12}]}>
-            <View style={{display: 'flex', alignItems: 'center' }}>
+          <View style={styles.cardBar}></View>
+            <View style={{flex: 1, marginLeft: 16}}>
                 <Text style={styles.itemPessoa}>{item.pessoa}</Text>
                 <Text style={styles.itemDescricao}>{item.descricao}</Text>
             </View>
@@ -126,6 +127,12 @@ const styles = StyleSheet.create({
   fontWeight: 'bold',
   marginTop: 32,
 },
+cardBar: {
+  height: 40,
+  borderRadius: 5,
+  backgroundColor: '#d6171d',
+  padding: 3,
+},
   btn: {
     backgroundColor: '#1C2735',
     borderRadius: 8,
@@ -148,12 +155,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#273344',
-
+    padding: 16,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
   },
   itemPessoa: {
     color: '#fff',

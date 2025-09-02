@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Text, TextInput, View, Alert, StyleSheet, Pressable } from 'react-native';
+import { Text, TextInput, View, Alert, StyleSheet, Pressable, Modal} from 'react-native';
+import DateTimePicker, { DateType, useDefaultStyles } from 'react-native-ui-datepicker';
 import { saveDivida } from '~/services/storage';
 import BackBtn from '~/components/BackBtn';
 import { useNavigation } from '@react-navigation/native';
@@ -12,18 +13,26 @@ export default function AddDivida() {
     const [pessoa, setPessoa] = useState('');
     const [descricao, setDescricao] = useState('');
     const [valor, setValor] = useState('');
+
+    const defaultStyles = useDefaultStyles();
+    const [selected, setSelected] = useState<DateType>();
     
+    const [showDatePicker, setShowDatePicker] = useState(false); // Novo estado
+
     async function handleAddDivida() {
         if (!pessoa.trim() || !descricao.trim() || !valor.trim()) {
             Alert.alert('Erro', 'Preencha todos os campos corretamente.');
             return;
         }
+
+        const descricaoSemQuebra = descricao.replace(/\n/g, ' ');
         
         const novaDivida = {
             id: Date.now().toString(),
             pessoa,
-            descricao,
+            descricao: descricaoSemQuebra,
             valor: parseFloat(valor),
+            data: selected instanceof Date ? selected.toISOString() : null,
         };
         
         try {
@@ -41,9 +50,23 @@ export default function AddDivida() {
     return (
         <Layout>
         <BackBtn />
-        
         <View style={styles.container}>
             <Text style={styles.label}>DETALHES</Text>
+                <View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                        <Ionicons name="cash-outline" size={24} color="#C5D0DE" />
+                        <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>Valor</Text>
+                    </View>
+                    <TextInput
+                    value={valor}
+                    onChangeText={setValor}
+                    keyboardType="numeric"
+                    placeholder="R$ 0,00"
+                    placeholderTextColor="#67788c"
+                    style={styles.input}
+                />
+            </View>
+            <View style={{borderWidth: 1, borderColor: '#546782', marginHorizontal: 24, marginBottom: 32}}></View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
                 <Ionicons name="person-outline" size={24} color="#C5D0DE" />
                 <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>Pessoa</Text>
@@ -55,6 +78,54 @@ export default function AddDivida() {
                 placeholderTextColor="#67788c"
                 style={styles.input}
             />
+            <View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                    <Ionicons name="calendar-outline" size={24} color="#C5D0DE" />
+                    <Text style={{ fontSize: 16, color: '#C5D0DE', fontWeight: '600' }}>Data</Text>
+                </View>
+                <View>
+                    <Pressable style={[styles.input, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]} onPress={() => setShowDatePicker(true)}>
+                        <Text style={{color:'white',fontSize: 16}}>{selected instanceof Date ? selected.toLocaleDateString() : 'Selecionar data'}</Text>
+                        <Ionicons name="calendar-outline" size={24} color="#67788c" />
+                    </Pressable>
+                </View>
+
+            </View>
+
+            <Modal
+                    visible={showDatePicker}
+                    transparent
+                    animationType="fade"
+                    onRequestClose={() => setShowDatePicker(false)}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalContent}>
+                            <DateTimePicker
+                                mode="single"
+                                date={selected}
+                                onChange={({ date }) => {
+                                    setSelected(date);
+                                    setShowDatePicker(false);
+                                }}
+                                styles={{
+                                    ...defaultStyles,
+                                    today: { borderColor: 'blue', borderWidth: 1 },
+                                    selected: { backgroundColor: 'blue' },
+                                    selected_label: { color: 'white' },
+                                }}
+                                style={{ backgroundColor: 'white', borderRadius: 8 }}
+                            />
+                            <Pressable
+                                style={styles.closeBtn}
+                                onPress={() => setShowDatePicker(false)}
+                            >
+                                <Text style={{ color: '#d6171d', fontWeight: 'bold' }}>Fechar</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+
+
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
                 <Ionicons name="document-text-outline" size={24} color="#C5D0DE" />
                 <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>Descrição</Text>
@@ -68,21 +139,6 @@ export default function AddDivida() {
                 multiline
                 numberOfLines={4}
             />
-        </View>
-        
-        <View style={styles.container}>
-            <Text style={styles.label}>Qual o valor da sua dívida?</Text>
-            <View>
-                <Text style={{fontSize: 16, color: '#C5D0DE', fontWeight: '600'}}>$ Valor</Text>
-                <TextInput
-                value={valor}
-                onChangeText={setValor}
-                keyboardType="numeric"
-                placeholder="R$ 0,00"
-                placeholderTextColor="#67788c"
-                style={styles.input}
-            />
-            </View>
         </View>
         
         <Pressable style={styles.btn} onPress={handleAddDivida}>
@@ -129,5 +185,30 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: '600',
-    }
+    },
+    dateBtn: {
+        backgroundColor: '#546782',
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        marginLeft: 8,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        width: 320,
+        alignItems: 'center',
+        elevation: 5,
+    },
+    closeBtn: {
+        marginTop: 12,
+        padding: 8,
+    },
 });
