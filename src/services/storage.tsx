@@ -8,6 +8,7 @@ export type Divida = {
     descricao: string;
     valor: number;
     data: string | null;
+    dividaPaga: boolean;
 }
 
 export async function saveDivida(divida: Divida) {

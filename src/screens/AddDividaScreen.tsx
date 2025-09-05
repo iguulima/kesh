@@ -33,6 +33,7 @@ export default function AddDivida() {
             descricao: descricaoSemQuebra,
             valor: parseFloat(valor),
             data: selected instanceof Date ? selected.toISOString() : null,
+            dividaPaga: false,
         };
         
         try {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, Modal, StyleSheet, Pressable } from 'react-native';
 import {Divida} from '~/services/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { deleteDivida, getDividas } from '~/services/storage';
+import { updateDividas } from '~/services/storage';
 
 type Props = {
     visible: boolean;
@@ -10,8 +10,16 @@ type Props = {
     divida: Divida | null;
     onDelete: (id: string) => void;
 }
+
 export default function ModalContent({ visible, onClose, divida, onDelete }: Props) {
     if (!divida) return null;
+
+        async function handlePagarDivida() {
+        if (!divida) return;
+        const dividaAtualizada = { ...divida, dividaPaga: true };
+        await updateDividas(dividaAtualizada);
+        onClose();
+    }
 
     return(
         <Modal
@@ -60,9 +68,12 @@ export default function ModalContent({ visible, onClose, divida, onDelete }: Pro
                             </Text>
                         </View>
                         <Text style={styles.contentCardText}>
-                            {divida.data ? new Date(divida.data).toLocaleDateString() : 'Sem data'}
+                            {divida.data ? new Date(divida.data).toLocaleDateString('pt-BR') : 'Sem data'}
                         </Text>
                     </View>
+                    <Pressable style={styles.pagarBtn} onPress={handlePagarDivida}>
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Pagar Dívida</Text>
+                    </Pressable>
                     <Pressable onPress={() => { divida && onDelete(divida.id); onClose(); }} style={styles.deleteBtn}>
                         <Text style={{ color: '#fff', fontWeight: 'bold' }}>Excluir Dívida</Text>
                     </Pressable>
@@ -82,7 +93,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         backgroundColor: '#131a28',
         width: '90%',
-        height: '70%',
+        height: '75%',
         borderRadius: 16,
         borderWidth: 1,
         borderColor: '#273344',
@@ -113,6 +124,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#fff',
         fontWeight: '500',
+    },
+    pagarBtn: {
+        backgroundColor: '#00A63E',
+        borderRadius: 8,
+        padding: 12,
+        alignItems: 'center',
+        marginTop: 16,
     },
     deleteBtn: {
         backgroundColor: '#FF6467',
