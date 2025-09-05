@@ -41,10 +41,6 @@ Com ele, você pode **criar**, **deletar** e **acompanhar um resumo** das dívid
 
 4. Abra o app no **Expo Go** (Android/iOS) ou rode em um emulador.  
 
-## 📸 Preview  
-
-*(adicione aqui prints do app ou um GIF de uso)*  
-
 ## 📌 Futuras melhorias  
 
 - ✅ Edição de dívidas já criadas  
