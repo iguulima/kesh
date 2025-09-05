@@ -17,7 +17,7 @@ Com ele, você pode **criar**, **deletar** e **acompanhar um resumo** das dívid
 - **React Native** – framework para desenvolvimento mobile multiplataforma  
 - **TypeScript** – tipagem estática para maior segurança e produtividade  
 - **Expo** – para facilitar o desenvolvimento, build e testes do app  
-- **AsyncStorage (ou equivalente)** – armazenamento local de dados simples  
+- **AsyncStorage** – armazenamento local de dados simples  
 
 ## ▶️ Como rodar o projeto  
 
@@ -44,9 +44,8 @@ Com ele, você pode **criar**, **deletar** e **acompanhar um resumo** das dívid
 ## 📌 Futuras melhorias  
 
 - ✅ Edição de dívidas já criadas  
-- ✅ Filtros e categorias de dívidas  
-- ✅ Exportação de dados  
-
+- ✅ Filtros e categorias de dívidas
+  
 ## 📄 Licença  
 
 Este projeto está sob a licença MIT.  
